@@ -4,24 +4,39 @@ clear; clc; close all;
 % parameters
 n = 5;
 g = 9.81; 
-m = ones(n, 1) * 0.5;
+m_0 = 1;
 l_0 = 0.4;
 l = ones(n, 1) * l_0;
 nf = sqrt(g/l_0); % natural frequency of pendulums
+
+%% Masses
+mass_case = 'descent';'same';
+switch mass_case
+    case 'same'
+        m = ones(n, 1) * m_0;
+    case 'descent'
+        m = ones(n, 1);
+        for i = 1:n
+            m(i) = 0.1^(i-1) * m_0;
+        end
+end
 
 %% Initial Conditions
 extForce_case = 'extForce';'noExtForce';
 switch extForce_case
     case 'noExtForce'
-        theta_initial = ones(n, 1) * (pi/6); % Initial angles
+        theta_initial = ones(n, 1) * (pi/10); % Initial angles
         omega_initial = zeros(n, 1); % Initial angular velocities
         C = 0; % no external force
         omega_0 = 0;
     case 'extForce'
         theta_initial = zeros(n,1); % zero initial conditions
         omega_initial = zeros(n,1);
-        C = 0.5; % amplitude of external force
-        omega_0 = nf+0.1 ; % driving frequency of external force 
+        C = 0.1; % amplitude of external force
+
+        % driving frequency of external force
+        %omega_0 = nf+0.1;  % near natural frq
+        omega_0 = 2*nf; % far from natural frq
 end
 
 Theta_initial = [theta_initial; omega_initial];
