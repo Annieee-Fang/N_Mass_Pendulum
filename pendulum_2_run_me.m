@@ -65,3 +65,16 @@ for k = 1:5:length(t)
     axis(axis_boundary);
     pause(0.01);
 end
+
+% Plot
+figure;
+plot(t, theta_t, 'LineWidth', 1.5);
+title('Angle-Time Plot');
+xlabel('Time (s)');
+ylabel('Angle (radians)');
+grid on;
+legend_str = cell(n, 1);
+for i = 1:n
+   legend_str{i} = sprintf('Theta %d', i);
+end
+legend(legend_str, 'Location', 'northeast');
