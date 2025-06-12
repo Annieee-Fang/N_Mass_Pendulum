@@ -7,3 +7,5 @@ Log:
 - June 8th 2025: Fangfang added the theta-t plot
 
 - June 9th 2025: Olivia added the descending masses case and debugged for the external force calculation
+
+- June 11th 2025: Group meeting added the trajectory of the masses in the animation
