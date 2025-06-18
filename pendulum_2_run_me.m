@@ -74,7 +74,7 @@ xlabel('Time (s)');
 ylabel('Angle (radians)');
 grid on;
 legend_str = cell(n, 1);
-for i = 1:n
+for i = 1:n≠≠
    legend_str{i} = sprintf('Theta %d', i);
 end
 legend(legend_str, 'Location', 'northeast');
