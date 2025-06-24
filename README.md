@@ -9,3 +9,7 @@ Log:
 - June 9th 2025: Olivia added the descending masses case and debugged for the external force calculation
 
 - June 11th 2025: Group meeting added the trajectory of the masses in the animation
+
+- June 18th 2025: Fangfang added linearized cases
+
+- June 24th 2025: Olivia added cases with single variable length
