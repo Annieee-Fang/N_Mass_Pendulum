@@ -25,7 +25,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'noExtForce';'extForce';
+extForce_case = 'extForce';'noExtForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (.1); % Initial angles
@@ -50,24 +50,6 @@ t_end = 15;
 t_span = [t_start t_end]; 
 
 [t, Y] = ode45(@(t,Theta) pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, t_span), t_span, Theta_initial);
-
-% Cartesian coordinates
-%x_t = zeros(size(theta_t, 1), n);
-%y_t = zeros(size(theta_t, 1), n);
-
-%for i = 1:length(t)
-%    for j = 1:i
-%        x_t(:, i) = x_t(:, i) + l(j) * sin(theta_t(:, j));
-%        y_t(:, i) = y_t(:, i) - l(j) * cos(theta_t(:, j));
-%    end
-%end
-
-%x_t = x_t';
-%y_t = y_t';
-
-% include the pivot point (0,0)
-%x_trajectory = [zeros(size(x_t,1),1), x_t];
-%y_trajectory = [zeros(size(y_t,1),1), y_t];
 
 % Compute positions
 a = zeros(length(t), n);
@@ -162,38 +144,3 @@ end
 close(vidfile);
 
 disp('Video is completed!');
-
-
-
-%% Animation
-%figure;
-%total_length = sum(l);
-%axis_boundary = [-total_length, total_length, -total_length, 0.5];
-%p_handle = plot(0,0,'o-','MarkerFaceColor','b','LineWidth',2); 
-%title('N-Mass Pendulum Animation');
-%xlabel('x (m)');
-%ylabel('y (m)');
-%grid on;
-%axis equal;
-
-%for k = 1:5:length(t)
-    %
-%    X_k = [0; x_t(k, :)'];
-%    Y_k = [0; y_t(k, :)'];
-%    set(plot(0, 0, 'o-', 'MarkerFaceColor', 'b', 'LineWidth', 2), 'XData', X_k, 'YData', Y_k);
-%    axis(axis_boundary);
-%    pause(0.01);
-%end
-
-% Plot
-%figure;
-%plot(t, theta_t, 'LineWidth', 1.5);
-%title('Angle-Time Plot');
-%xlabel('Time (s)');
-%ylabel('Angle (radians)');
-%grid on;
-%legend_str = cell(n, 1);
-%for i = 1:n
-%   legend_str{i} = sprintf('Theta %d', i);
-%end
-%legend(legend_str, 'Location', 'northeast');
