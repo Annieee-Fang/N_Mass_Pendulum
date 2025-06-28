@@ -197,3 +197,15 @@ disp('Video is completed!');
 %   legend_str{i} = sprintf('Theta %d', i);
 %end
 %legend(legend_str, 'Location', 'northeast');
+
+%% Plot
+figure;
+hold on;
+for i = 1:n
+    plot(t, Y(:,i), 'LineWidth', 1.5,'color', colors(i,:));
+    title('Angle-Time Plot');
+    xlabel('Time (s)');
+    ylabel('Angle (radians)');
+    grid on;
+end
+%legend(legend_str, 'Location', 'northeast');
