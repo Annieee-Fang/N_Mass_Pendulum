@@ -25,7 +25,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'extForce';'noExtForce';
+extForce_case = 'noExtForce';'extForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (.1); % Initial angles
