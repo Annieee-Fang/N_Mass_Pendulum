@@ -12,15 +12,15 @@ function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
     order = 2;
     tol = 3e-3;
     concavity = conc;
-        slope = 1;
-        xL1 = -0.05:.05:0.05;
-    
-        x = [xL, 0.5-concavity+xL1, xR];
-        y = [zeros(size(xL)), (0.5+concavity)+xL1*slope, ones(size(xR))];
-    
-        w = ones(size(x));
-        w([1:length(xL),length(x)-length(xR)+1:length(x)]) = 10;
-        sp = spaps(x,y, tol, w, order);
+    slope = 1;
+    xL1 = -0.05:.05:0.05;
+
+    x = [xL, 0.5-concavity+xL1, xR];
+    y = [zeros(size(xL)), (0.5+concavity)+xL1*slope, ones(size(xR))];
+
+    w = ones(size(x));
+    w([1:length(xL),length(x)-length(xR)+1:length(x)]) = 10;
+    sp = spaps(x,y, tol, w, order);
 
     % 1st & 2nd order diff of the last length
     l(n) = (l_max-l_min) * fnval(sp, t/(t_span(2)-t_span(1))) + l_min;
@@ -47,7 +47,7 @@ function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
                 + 2 * omega(k) * l_dot(k) * l(q) * cos(theta(q)-theta(k))));
         end
         if q == 1
-                first_term_of_B_q = first_term_of_B_q + F_ext;
+            first_term_of_B_q = first_term_of_B_q + F_ext;
         end
         
         second_term_of_B_q = g * l(q) * sin(theta(q)) * sum(m(q:n));

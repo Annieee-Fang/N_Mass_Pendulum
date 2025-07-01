@@ -13,7 +13,7 @@ nf = sqrt(g/l_0); % natural frequency of pendulums
 conc = 0; % concavity of change of length
 
 %% Masses
-mass_case = 'descent';'same';
+mass_case = 'same';'descent';
 switch mass_case
     case 'same'
         m = ones(n, 1) * m_0;
@@ -28,7 +28,7 @@ end
 extForce_case = 'noExtForce';'extForce';
 switch extForce_case
     case 'noExtForce'
-        theta_initial = ones(n, 1) * (.1); % Initial angles
+        theta_initial = ones(n, 1) * (pi/10); % Initial angles
         omega_initial = zeros(n, 1); % Initial angular velocities
         C = 0; % no external force
         omega_0 = 0;
