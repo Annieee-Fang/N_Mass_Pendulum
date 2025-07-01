@@ -13,3 +13,7 @@ Log:
 - June 18th 2025: Fangfang added linearized cases
 
 - June 24th 2025: Olivia added cases with single variable length
+
+- June 24th 2025: Group meeting, Olivia added t-theta plot for cases with single variable length
+
+- July 1st 2025: Olivia created plot generator for t-theta plots of the last mass in different changing period of the length
