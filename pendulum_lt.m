@@ -1,4 +1,4 @@
-function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, t_span)
+function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, ct_span)
 
     theta = Theta(1:n);
     omega = Theta(n+1:2*n);
@@ -23,11 +23,28 @@ function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
     sp = spaps(x,y, tol, w, order);
 
     % 1st & 2nd order diff of the last length
-    l(n) = (l_max-l_min) * fnval(sp, t/(t_span(2)-t_span(1))) + l_min;
-    f1 = fnder(sp);
-    f2 = fnder(sp,2);
-    l_dot(n) = (l_max-l_min) * fnval(f1, t/(t_span(2)-t_span(1)));
-    l_2dot(n) = (l_max-l_min) * fnval(f2, t/(t_span(2)-t_span(1)));
+    %l(n) = (l_max-l_min) * fnval(sp, t/(t_span(2)-t_span(1))) + l_min;
+    %f1 = fnder(sp);
+    %f2 = fnder(sp,2);
+    %l_dot(n) = (l_max-l_min) * fnval(f1, t/(t_span(2)-t_span(1)));
+    %l_2dot(n) = (l_max-l_min) * fnval(f2, t/(t_span(2)-t_span(1)));
+    if ct_span(1)<t && t < ct_span(2)
+        l(n) = (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
+        f1 = fnder(sp);
+        f2 = fnder(sp,2);
+        l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
+        l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
+    end
+    if t<=ct_span(1)
+        l(n) = l_min;
+        l_dot(n) = 0;
+        l_2dot(n) = 0;
+    end
+    if t>=ct_span(2)
+        l(n) = l_max;
+        l_dot(n) = 0;
+        l_2dot(n) = 0;
+    end
     
     A = zeros(n, n);
     B = zeros(n, 1);

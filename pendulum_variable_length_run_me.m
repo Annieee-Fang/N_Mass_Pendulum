@@ -7,7 +7,7 @@ g = 9.81;
 m_0 = 1;
 l_0 = 1;
 l = ones(n, 1) * l_0;
-l_max = 2; % range of length
+l_max = 5; % range of length
 l_min = 1;
 nf = sqrt(g/l_0); % natural frequency of pendulums
 conc = 0; % concavity of change of length
@@ -25,7 +25,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'noExtForce';'extForce';
+extForce_case = 'extForce';'noExtForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (pi/10); % Initial angles
@@ -35,7 +35,7 @@ switch extForce_case
     case 'extForce'
         theta_initial = zeros(n,1); % zero initial conditions
         omega_initial = zeros(n,1);
-        C = .5; % amplitude of external force
+        C = 1; % amplitude of external force
 
         % driving frequency of external force
         omega_0 = nf+0.1;  % near natural frq
@@ -49,7 +49,9 @@ t_start = 0;
 t_end = 15;
 t_span = [t_start t_end]; 
 
-[t, Y] = ode45(@(t,Theta) pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, t_span), t_span, Theta_initial);
+ct_span = [0 10];
+
+[t, Y] = ode45(@(t,Theta) pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, ct_span), t_span, Theta_initial);
 
 % Compute positions
 a = zeros(length(t), n);
@@ -72,7 +74,16 @@ for i = 1:length(t)
     w = ones(size(a));
     w([1:length(xL),length(a)-length(xR)+1:length(a)]) = 10;
     sp = spaps(a,b, tol, w, order);
-    l(n) = (l_max-l_min) * fnval(sp, i/length(t)) + l_min;
+    %l(n) = (l_max-l_min) * fnval(sp, i/length(t)) + l_min;
+    if ct_span(1)<t(i) && t(i) < ct_span(2)
+        l(n) = (l_max-l_min) * fnval(sp, (t(i)-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
+    end
+    if t(i)<=ct_span(1)
+        l(n) = l_min;
+    end
+    if t(i)>=ct_span(2)
+        l(n) = l_max;
+    end
 
     for j = 1:n
         xi = xi + l(j)*sin(Y(i,j));

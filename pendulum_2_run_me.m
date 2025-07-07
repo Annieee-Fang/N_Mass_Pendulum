@@ -7,10 +7,11 @@ g = 9.81;
 m_0 = 1;
 l_0 = 1;
 l = ones(n, 1) * l_0;
+l(n) = 9;
 nf = sqrt(g/l_0); % natural frequency of pendulums
 
 %% Masses
-mass_case = 'descent';'same';
+mass_case = 'same';'descent';
 switch mass_case
     case 'same'
         m = ones(n, 1) * m_0;
@@ -22,7 +23,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'noExtForce';'extForce';
+extForce_case = 'extForce';'noExtForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (.1); % Initial angles
@@ -32,7 +33,7 @@ switch extForce_case
     case 'extForce'
         theta_initial = zeros(n,1); % zero initial conditions
         omega_initial = zeros(n,1);
-        C = .5; % amplitude of external force
+        C = 1; % amplitude of external force
 
         % driving frequency of external force
         omega_0 = nf+0.1;  % near natural frq

@@ -6,7 +6,7 @@ g = 9.81;
 m_0 = 1;
 l_0 = 2;
 l = ones(n, 1) * l_0;
-l_max = 2; % range of length
+l_max = 10; % range of length
 l_min = 1;
 nf = sqrt(g/l_0); % natural frequency of pendulums
 conc = 0; % concavity of change of length
@@ -24,7 +24,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'noExtForce';'extForce';
+extForce_case = 'extForce';'noExtForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (pi/10); % Initial angles
@@ -78,7 +78,6 @@ cmap = colormap(parula(N+1));
 colors = cmap; 
 
 %% Plot
-figure;
 hold on;
 for k = 1:ct_step
     plot(t_mod, Y_mod(:,k), 'LineWidth', 1.5,'color', colors(k,:));
@@ -87,51 +86,3 @@ for k = 1:ct_step
     ylabel('Angle (radians)');
     grid on;
 end
-
-
-%% Set up the VideoWriter object
-%vidfile = VideoWriter('N-link_pendulum_animation.mp4', 'MPEG-4');
-%vidfile.FrameRate = 25;   % Slower playback if the number is smaller (was 25)
-%vidfile.Quality = 100;
-%open(vidfile);
-
-%set(gcf,'position',[476 360 400 300])
-%set(gcf,'color','w')
-%for i = 1:2:length(t)
-%    clf;
-%    hold on;
-
-%    for j = N:-1:1
-%        color_at_time = colors(j, :);  % fixed color for each mass
-%        h = plot(x_trajectory(1:i,j+1), y_trajectory(1:i,j+1), 'Color', color_at_time, 'LineWidth', 1.5);
-%        alpha_val = .1; % transparency for whole trajectory
-%        set(h, 'Color', [color_at_time, alpha_val]);  % apply transparency to the color
-%    end
-
-%    plot(0, 0, 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); % pivot point at (0, 0)
-%    plot(x(i,1), y(i,1), 'o', 'MarkerSize', 10, 'MarkerFaceColor', colors(1,:),...
-%        'Color', colors(j,:),'MarkerEdgeColor','k');
-%    plot([0 x(i,1)],[0 y(i,1)], '-','Color', colors(1,:), 'LineWidth', 2)
-%    for j = 2:N
-%        plot([x(i,j-1), x(i,j)], [y(i,j-1), y(i,j)], '-','Color', colors(j,:), 'LineWidth', 2);
-%        plot(x(i,j), y(i,j), 'o', 'MarkerSize', 10, 'MarkerFaceColor', colors(j,:),...
-%            'Color', colors(j,:),'MarkerEdgeColor','k')
-%    end
-
- %   axis equal;
- %   box on
- %   set(gca,'fontsize',16,'ticklabelinterpreter','latex')
- %   title(sprintf('%d-link pendulum with strings, t = %.2f s', N, t(i)),'interpreter','latex','FontSize',20);
- %   axis([-N N -N-2 .5]);
- %   xticks(-6:2:6)
-  %  yticks(-6:2:0)
-    % drawnow;
-    % Capture the frame and write to video
- %   F = getframe(fig);
- %   writeVideo(vidfile, F);
-%end
-
-% Close the video file after the loop
-%close(vidfile);
-
-%disp('Video is completed!');
