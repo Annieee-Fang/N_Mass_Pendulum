@@ -25,7 +25,7 @@ switch mass_case
 end
 
 %% Initial Conditions
-extForce_case = 'extForce';'noExtForce';
+extForce_case = 'noExtForce';'extForce';
 switch extForce_case
     case 'noExtForce'
         theta_initial = ones(n, 1) * (pi/10); % Initial angles
@@ -49,7 +49,7 @@ t_start = 0;
 t_end = 15;
 t_span = [t_start t_end]; 
 
-ct_span = [0 10];
+ct_span = [0 10.5];
 
 [t, Y] = ode45(@(t,Theta) pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, ct_span), t_span, Theta_initial);
 
@@ -95,6 +95,7 @@ for i = 1:length(t)
     % Save the current position for the trajectory plot
     x_trajectory(i,:) = x(i,:);
     y_trajectory(i,:) = y(i,:);
+    ln_func(i) = l(n);
 end
 
 % include the pivot point (0,0)
@@ -142,7 +143,7 @@ for i = 1:2:length(t)
     box on
     set(gca,'fontsize',16,'ticklabelinterpreter','latex')
     title(sprintf('%d-link pendulum with strings, t = %.2f s', N, t(i)),'interpreter','latex','FontSize',20);
-    axis([-N N -N-2 .5]);
+    axis([-N N -N-l_max .5]);
     xticks(-6:2:6)
     yticks(-6:2:0)
     % drawnow;
@@ -156,41 +157,6 @@ close(vidfile);
 
 disp('Video is completed!');
 
-
-
-%% Animation
-%figure;
-%total_length = sum(l);
-%axis_boundary = [-total_length, total_length, -total_length, 0.5];
-%p_handle = plot(0,0,'o-','MarkerFaceColor','b','LineWidth',2); 
-%title('N-Mass Pendulum Animation');
-%xlabel('x (m)');
-%ylabel('y (m)');
-%grid on;
-%axis equal;
-
-%for k = 1:5:length(t)
-    %
-%    X_k = [0; x_t(k, :)'];
-%    Y_k = [0; y_t(k, :)'];
-%    set(plot(0, 0, 'o-', 'MarkerFaceColor', 'b', 'LineWidth', 2), 'XData', X_k, 'YData', Y_k);
-%    axis(axis_boundary);
-%    pause(0.01);
-%end
-
-% Plot
-%figure;
-%plot(t, theta_t, 'LineWidth', 1.5);
-%title('Angle-Time Plot');
-%xlabel('Time (s)');
-%ylabel('Angle (radians)');
-%grid on;
-%legend_str = cell(n, 1);
-%for i = 1:n
-%   legend_str{i} = sprintf('Theta %d', i);
-%end
-%legend(legend_str, 'Location', 'northeast');
-
 %% Plot
 figure;
 hold on;
@@ -202,3 +168,11 @@ for i = 1:n
     grid on;
 end
 %legend(legend_str, 'Location', 'northeast');
+
+%% Plot for l_n
+figure;
+plot(t, ln_func,'LineWidth', 1.5);
+title('l_n-Time Plot');
+xlabel('Time (s)');
+ylabel('l_n Length');
+grid on;

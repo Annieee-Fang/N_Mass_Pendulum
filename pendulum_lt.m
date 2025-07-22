@@ -23,17 +23,13 @@ function dTheta_dt = pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
     sp = spaps(x,y, tol, w, order);
 
     % 1st & 2nd order diff of the last length
-    %l(n) = (l_max-l_min) * fnval(sp, t/(t_span(2)-t_span(1))) + l_min;
-    %f1 = fnder(sp);
-    %f2 = fnder(sp,2);
-    %l_dot(n) = (l_max-l_min) * fnval(f1, t/(t_span(2)-t_span(1)));
-    %l_2dot(n) = (l_max-l_min) * fnval(f2, t/(t_span(2)-t_span(1)));
+    
     if ct_span(1)<t && t < ct_span(2)
         l(n) = (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
         f1 = fnder(sp);
         f2 = fnder(sp,2);
-        l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
-        l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
+        l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1));
+        l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1));
     end
     if t<=ct_span(1)
         l(n) = l_min;

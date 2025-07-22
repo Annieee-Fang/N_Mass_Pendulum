@@ -29,8 +29,8 @@ function dTheta_dt = pendulum_ct(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
         l(n) = (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
         f1 = fnder(sp);
         f2 = fnder(sp,2);
-        l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
-        l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
+        l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1));
+        l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1));
 
         % for decreasing
         %l(n) = l_max - (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
