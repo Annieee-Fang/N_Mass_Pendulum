@@ -74,7 +74,7 @@ for i = 1:length(t)
     w = ones(size(a));
     w([1:length(xL),length(a)-length(xR)+1:length(a)]) = 10;
     sp = spaps(a,b, tol, w, order);
-    %l(n) = (l_max-l_min) * fnval(sp, i/length(t)) + l_min;
+
     if ct_span(1)<t(i) && t(i) < ct_span(2)
         l(n) = (l_max-l_min) * fnval(sp, (t(i)-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
     end

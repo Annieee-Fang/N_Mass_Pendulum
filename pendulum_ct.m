@@ -24,30 +24,19 @@ function dTheta_dt = pendulum_ct(t, Theta, n, g, m, l, C, omega_0, l_max, l_min,
 
     % 1st & 2nd order diff of the last length
     if ct_span(1)<t && t < ct_span(2)
-
-        % for increasing
         l(n) = (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1))) + l_min;
         f1 = fnder(sp);
         f2 = fnder(sp,2);
         l_dot(n) = (l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1));
         l_2dot(n) = (l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)))/(ct_span(2)-ct_span(1))^2;
-
-        % for decreasing
-        %l(n) = l_max - (l_max-l_min) * fnval(sp, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
-        %f1 = fnder(sp);
-        %f2 = fnder(sp,2);
-        %l_dot(n) = -(l_max-l_min) * fnval(f1, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
-        %l_2dot(n) = -(l_max-l_min) * fnval(f2, (t-ct_span(1))/(ct_span(2)-ct_span(1)));
     end
     if t<ct_span(1)
-        l(n) = l_min; % for increasing
-        %l(n) = l_max; % for decreasing
+        l(n) = l_min;
         l_dot(n) = 0;
         l_2dot(n) = 0;
     end
     if t>ct_span(2)
-        l(n) = l_max; % for increasing
-        %l(n) = l_min; % for decreasing
+        l(n) = l_max;
         l_dot(n) = 0;
         l_2dot(n) = 0;
     end
