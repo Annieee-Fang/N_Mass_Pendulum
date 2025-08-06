@@ -9,7 +9,7 @@ l = ones(n, 1) * l_0;
 l_max = 5; % range of length
 l_min = 1;
 nf = sqrt(g/l_0); % natural frequency of pendulums
-conc = -0.25; % concavity of change of length
+conc = 0; % concavity of change of length
 
 %% Masses
 mass_case = 'same';'descent';
@@ -164,8 +164,9 @@ dominantPeriod(ct_step+1) = dominantPeriod(ct_step);
 % plot will be frequency vs power
 hold on
 for k = 1:ct_step 
-    pxxLog = log10(pxxNewvec{k});
-    normalizedPowerSp = (pxxLog - min(pxxLog)) / (max(pxxLog) - min(pxxLog));
+    normalizedPowerSp = log10(pxxNewvec{k})/...
+            (max(log10(pxxNewvec{k}))-min(log10(pxxNewvec{k})));
+
     plot(fNewvec{k},normalizedPowerSp,...
         'k-','color', colors(k,:), 'LineWidth', 1.5)
     % In the plot, power = 1 represents that this frequency has the highest
@@ -174,7 +175,7 @@ end
 xlim([0 30]);
 xlabel('frequency')
 ylabel('power')
-title('log10 Powers of Frequencies')
+title('Normalized log10 Powers of Frequencies')
 grid on;
 colorbar('eastoutside');
 clim([0 ct_end]);
