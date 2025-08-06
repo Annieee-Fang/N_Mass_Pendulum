@@ -9,7 +9,7 @@ l = ones(n, 1) * l_0;
 l_max = 5; % range of length
 l_min = 1;
 nf = sqrt(g/l_0); % natural frequency of pendulums
-conc = 0; % concavity of change of length
+conc = -0.25; % concavity of change of length
 
 %% Masses
 mass_case = 'same';'descent';
@@ -49,7 +49,7 @@ t_end = 20;
 t_span = [t_start t_end]; 
 
 ct0 = 0;
-ct_step = 10;
+ct_step = 30;
 ct_end = 15;
 ct_span = [0,ct0]; % time span of length changing period
 
@@ -85,23 +85,12 @@ for k = 1:ct_step
             l(n) = l_max;
         end
 
-        Yn(i,k) = Y(i,n);
-        Y4(i,k) = Y(i, n-1);
-        ln_func(i,k) = l(n);
+        Yn{k}(i) = Y(i,n);
+        Y4{k}(i) = Y(i,n-1);
+        L{k}(i) = l(n);
     end
-
-    t_size(k) = length(t);
-end
-
-% only keep the data before shortest t
-Yn_mod = zeros(min(t_size), ct_step);
-Y4_mod = zeros(min(t_size), ct_step);
-L_mod = zeros(min(t_size), ct_step);
-for i = 1:min(t_size)
-    t_mod(i) = t(i);
-    Yn_mod(i,:) = Yn(i,:);
-    Y4_mod(i,:) = Y4(i,:);
-    L_mod(i,:) = ln_func(i,:);
+    
+    T{k} = t;
 end
 
 N = ct_step;
@@ -110,31 +99,30 @@ N = ct_step;
 % theta_5
 figure;
 cmap = colormap(parula(N+1));
-colors = cmap; 
+colors = [cmap 0.7*ones(size(cmap, 1), 1)]; 
 hold on;
 for k = 1:ct_step
-    plot(t_mod, Yn_mod(:,k), 'LineWidth', 1.5,'color', colors(k,:));
+    plot(T{k}, Yn{k}, 'LineWidth', 1.5,'color', colors(k,:));
 end
 title('\theta_5-Time Plot');
 xlabel('Time (s)');
 ylabel('Angle (radians)');
 grid on;
-ylim([-1, 1]);
+ylim([-0.8, 0.8]);
 colorbar('eastoutside');
 clim([0 ct_end]);
-%ylabel(a,'End of Changing Period','FontSize',16,'Rotation',270);
 
 % theta_4
 figure;
 hold on;
 for k = 1:ct_step
-    plot(t_mod, Y4_mod(:,k), 'LineWidth', 1.5,'color', colors(k,:));
+    plot(T{k}, Y4{k}, 'LineWidth', 1.5,'color', colors(k,:));
 end
 title('\theta_4-Time Plot');
 xlabel('Time (s)');
 ylabel('Angle (radians)');
 grid on;
-ylim([-1, 1]);
+ylim([-0.8, 0.8]);
 colorbar('eastoutside');
 clim([0 ct_end]);
 
@@ -142,7 +130,8 @@ clim([0 ct_end]);
 figure;
 hold on;
 for k = 1:ct_step
-    plot(t_mod, L_mod(:,k), 'LineWidth', 1.5,'color', colors(k,:));
+    %plot(t_mod, L_mod(:,k), 'LineWidth', 1.5,'color', colors(k,:));
+    plot(T{k}, L{k}, 'LineWidth', 1.5,'color', colors(k,:));
 end
 title('Length_n-Time Plot');
 xlabel('Time (s)');
@@ -152,4 +141,40 @@ ylim([l_min-0.5, l_max+0.5]);
 colorbar('eastoutside');
 clim([0 ct_end]);
 
-% power spectrum
+%% power spectrum
+figure;
+dominantPeriod = zeros(ct_step+1); % initialize matrix of saved period
+
+for k = 1:ct_step % run loop over the initial conditions
+        dt_avg = mean(diff(T{k})); % this should be your time vector/array
+
+        % this is the main step of computing the power, where I'm using the built-in pwelch function
+        % outputs: pxxNew = power, fNew = frequency
+        [pxxNew,fNew] = pwelch(Yn{k},[],[],[],1/dt_avg); 
+        pxxNewvec{k} = pxxNew(1:ceil(size(pxxNew,1)));
+        fNewvec{k} = fNew(1:ceil(size(pxxNew,1)));
+        freqNew = meanfreq(pxxNew,fNew); % compute the mean frequency
+        dominantFreqNew(k) = freqNew;
+        dominantPeriod(k) = 1/dominantFreqNew(k);
+end
+
+% expand the matrix dimensions so that surf plot works well
+dominantPeriod(ct_step+1) = dominantPeriod(ct_step);
+
+% plot will be frequency vs power
+hold on
+for k = 1:ct_step 
+    pxxLog = log10(pxxNewvec{k});
+    normalizedPowerSp = (pxxLog - min(pxxLog)) / (max(pxxLog) - min(pxxLog));
+    plot(fNewvec{k},normalizedPowerSp,...
+        'k-','color', colors(k,:), 'LineWidth', 1.5)
+    % In the plot, power = 1 represents that this frequency has the highest
+    % log10 power in the signal
+end
+xlim([0 30]);
+xlabel('frequency')
+ylabel('power')
+title('log10 Powers of Frequencies')
+grid on;
+colorbar('eastoutside');
+clim([0 ct_end]);

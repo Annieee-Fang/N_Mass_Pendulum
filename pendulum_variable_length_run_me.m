@@ -7,7 +7,7 @@ g = 9.81;
 m_0 = 1;
 l_0 = 1;
 l = ones(n, 1) * l_0;
-l_max = 5; % range of length
+l_max = 1; % range of length
 l_min = 1;
 nf = sqrt(g/l_0); % natural frequency of pendulums
 conc = 0; % concavity of change of length
@@ -46,10 +46,10 @@ Theta_initial = [theta_initial; omega_initial];
 
 %% ODE Solver
 t_start = 0;
-t_end = 15;
+t_end = 20;
 t_span = [t_start t_end]; 
 
-ct_span = [0 10.5];
+ct_span = [0 15];
 
 [t, Y] = ode45(@(t,Theta) pendulum_lt(t, Theta, n, g, m, l, C, omega_0, l_max, l_min, conc, ct_span), t_span, Theta_initial);
 
